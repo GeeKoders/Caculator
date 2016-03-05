@@ -6,6 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CounterActivity extends AppCompatActivity {
 
@@ -32,6 +38,12 @@ public class CounterActivity extends AppCompatActivity {
     private boolean isNum ;
 
     private String result = "" ;
+//    private String first_result = "" ;
+//    private String second_result = "" ;
+    private String sign  ;
+//    private char first_sign  ;
+//    private char second_sign  ;
+    private List<String> list = new ArrayList<String>() ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,46 +141,46 @@ public class CounterActivity extends AppCompatActivity {
             case R.id.divider:
                 break ;
             case R.id.num7:
-                count(true,num7_text) ;
+                count(num7_text) ;
                 break ;
             case R.id.num8:
-                count(true,num8_text) ;
+                count(num8_text) ;
                 break ;
             case R.id.num9:
-                count(true,num9_text) ;
+                count(num9_text) ;
                 break ;
             case R.id.multiplier:
                 break ;
             case R.id.num4:
-                count(true,num4_text) ;
+                count(num4_text) ;
                 break ;
             case R.id.num5:
-                count(true,num5_text) ;
+                count(num5_text) ;
                 break ;
             case R.id.num6:
-                count(true,num6_text) ;
+                count(num6_text) ;
                 break ;
             case R.id.minus:
                 break ;
             case R.id.num1:
-                count(true,num1_text) ;
+                count(num1_text) ;
                 break ;
             case R.id.num2:
-                count(true,num2_text) ;
+                count(num2_text) ;
                 break ;
             case R.id.num3:
-                count(true,num3_text) ;
+                count(num3_text) ;
                 break ;
             case R.id.add:
-                count(false,"+") ;
+                count("+") ;
                 break ;
             case R.id.num0:
-                count(true,num0_text) ;
+                count(num0_text) ;
                 break ;
             case R.id.dot:
                 break ;
             case R.id.equal:
-                count(false,"=") ;
+                count("=") ;
                 break ;
         }
 
@@ -183,37 +195,59 @@ public class CounterActivity extends AppCompatActivity {
         finish() ;
     }
 
-    public void count(boolean isNum,String content){
-        if(isNum){
+    public void count(String content){
+
+
+        if(isNumeric(content)){
             calResult.setText(result += content) ;
         }else{
-            int total = calResult(result, content, result, "=") ;
-            if(content.equals("=") && total > -1){
+             result += content ;
+
+            System.out.println("eee:"+result) ;
+            int total = calResult(result.substring(0,result.length()-1), result.substring(result.length()-1));
+            result = "" ;
+
+            //count(result) ;
+
+            Toast.makeText(CounterActivity.this, "aaa" + total, Toast.LENGTH_SHORT).show() ;
+            if( total > -1){
                 calResult.setText(String.valueOf(total)) ;
             }
         }
     }
 
-    public int calResult(String x1, String sign1, String x2, String sign2){
-        int num1 = Integer.parseInt(x1) ;
-        int num2 = Integer.parseInt(x2) ;
-        if( (x1 != null && ! x1.equals("")) && (x2 != null && ! x2.equals("")) &&
-        (sign1 != null && ! sign1.equals("")) && (sign2 != null && ! sign2.equals(""))){
-            switch(sign1){
+    public int calResult(String result, String sign){
+        if (!result.isEmpty() && !sign.isEmpty()){
+            list.add(result) ;
+            list.add(sign) ;
+        }
+
+        if(list.size()==4 && "=".equals(list.get(3))){
+            switch(list.get(1)){
                 case "+":
-                    return num1+num2 ;
+                    return Integer.parseInt(list.get(0))+Integer.parseInt(list.get(2)) ;
                 case "-":
-                    return num1-num2 ;
+                    return Integer.parseInt(list.get(0))-Integer.parseInt(list.get(2)) ;
                 case "*":
-                    return num1*num2 ;
+                    return Integer.parseInt(list.get(0))*Integer.parseInt(list.get(2)) ;
                 case "/":
-                    return num1/num2 ;
+                    return Integer.parseInt(list.get(0))/Integer.parseInt(list.get(2)) ;
             }
-        }else{
-            return -1 ;
         }
         return -1 ;
     }
+
+    public boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*") ;
+        Matcher isNum = pattern.matcher(str) ;
+        if (isNum.matches()){
+            return true ;
+        }else{
+            return false ;
+        }
+
+    }
+
 
 
 

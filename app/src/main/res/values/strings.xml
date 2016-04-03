@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Deposit</string>
+    <string name="app_name">Caculator</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_counter">CounterActivity</string>
     <string name="result">結果</string>
